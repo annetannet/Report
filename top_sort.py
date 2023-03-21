@@ -1,7 +1,7 @@
 def TopologicalSort(graph):
     """
-
-    Упорядочивание вершин ацикличного графа таким образом, что для любого ребра (u,v) номер вершины u меньше номера вершины v
+    Упорядочивание вершин ацикличного графа таким образом, что для любого
+    ребра (u,v) номер вершины u меньше номера вершины v
 
     :param graph: ацикличный граф
     :return: список упорядоченных вершин
@@ -22,7 +22,8 @@ def TopologicalSort(graph):
                 return []
             degree[connected_node] += 1
     # Добавить в список вершины со степенью 0
-    nodes_zero_degree = [node for node in range(len(graph)) if degree[node] == 0]
+    nodes_zero_degree = [
+        node for node in range(len(graph)) if degree[node] == 0]
     result = []
     # Выполняется при наличии элементов в списке
     while nodes_zero_degree:
@@ -33,7 +34,8 @@ def TopologicalSort(graph):
         # Уменьшить степени всех вершин, на которые указывала удалённая
         for connected_node in graph[node]:
             degree[connected_node] -= 1
-            # Если удаленная вершина (u) указывала на вершину степени 0 (v), v добавляется в очередь
+            # Если удаленная вершина (u) указывала на вершину степени 0 (v),
+            # v добавляется в очередь
             if degree[connected_node] == 0:
                 nodes_zero_degree.append(connected_node)
     return result
