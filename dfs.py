@@ -23,8 +23,10 @@ def DFS(graph, node):
         used[node] = True
         ans.append(node)
         for i in graph[node]:
-            if not used.get(i):  # Проверяем, если уже были в i-ой вершине, второй раз не идём
+            if not used.get(i):
+                # Проверяем, если уже были в i-ой вершине, второй раз не идём
                 dfs(graph, i)
+        return []
 
     dfs(graph, node)
     return ans

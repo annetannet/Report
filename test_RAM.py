@@ -10,12 +10,14 @@ import graph_generator
 
 def logging(function):
     @functools.wraps(function)
+
     def wrapper(*args):
         k = 0
         a = function(*args)
         for i in a:
             k += sys.getsizeof(a)  # bytes
         print(k, end="\n\n")
+
     return wrapper
 
 

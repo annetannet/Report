@@ -6,6 +6,7 @@ import dikstra
 import graph_generator
 import top_sort
 import top_sort_DFS
+import sys
 
 
 def logging(function):
@@ -14,23 +15,32 @@ def logging(function):
         N = 1000
         function(*args)
         function(*args)
-        start_time = time.time()
-        for _ in range(N):
+        function(*args)
+
+        real_times = [0] * N
+        for i in range(N):
+            start_time = time.time()
             function(*args)
-        end_time = time.time()
-        work_time = end_time - start_time
-        print(work_time / N, end="\n\n")
+            end_time = time.time()
+            real_times[i] = end_time - start_time
+        average_time = sum(real_times) / N
+        digressions = [0] * N
+        for i in range(N):
+            digressions[i] = abs(real_times[i] - average_time)
+        aver_digression = sum(digressions) / N  # отклонение
+        print("aver digression", aver_digression)
+        return average_time
 
     return wrapper
 
 
 @logging
-def speed_dfs(graph, start):
+def speed_dfs(graph, start=0):
     return dfs.DFS(graph, start)
 
 
 @logging
-def speed_bfs(a, start):
+def speed_bfs(a, start=0):
     return bfs.BFS(a, start)
 
 
@@ -49,73 +59,32 @@ def speed_dijkstra(a, start):
     return dikstra.Dijkstra(a, start)
 
 
+def test_algorithm(args, function):
+    all_times = []
+    for i in args:
+        all_times.append(function(i))
+    return all_times
+
+
+def test(function):
+    dots_counts = [100, 300, 500, 800, 1200]
+    args = []
+    for i in dots_counts:
+        args.append(function(i))
+    test_ans = []
+    test_ans.append(test_algorithm(args, speed_dfs))
+    test_ans.append(test_algorithm(args, speed_bfs))
+    test_ans.append(test_algorithm(args, speed_top_sort_Kahn))
+    test_ans.append(test_algorithm(args, speed_top_sort_DFS))
+    return test_ans
+
+
+def get_data():
+    sys.setrecursionlimit(10000)
+    ans = []
+    ans.append(test(graph_generator.best_graph))
+    return ans
+
+
 if __name__ == '__main__':
-    best_data_100V = graph_generator.best_graph(100)
-    best_data_500V = graph_generator.best_graph(500)
-    best_data_800V = graph_generator.best_graph(800)
-    worst_data_100V = graph_generator.worst_graph(100)
-    worst_data_500V = graph_generator.worst_graph(500)
-    worst_data_800V = graph_generator.worst_graph(800)
-    rnd_data_100V = graph_generator.random_graph(100)
-    rnd_data_500V = graph_generator.random_graph(500)
-    rnd_data_800V = graph_generator.random_graph(800)
-    # best_weighted_graph_8KB = graph_generator.weighted_graph(graph_generator.best_graph(100), 2)
-    # worst_weighted_graph_8KB = graph_generator.weighted_graph(graph_generator.worst_graph(100), 2)
-    # rnd_weighted_graph_8KB = graph_generator.weighted_graph(graph_generator.random_graph(100), 2)
-    # best_weighted_graph_16KB = graph_generator.weighted_graph(graph_generator.best_graph(500), 2)
-    # worst_weighted_graph_16KB = graph_generator.weighted_graph(graph_generator.worst_graph(500), 2)
-    # rnd_weighted_graph_16KB = graph_generator.weighted_graph(graph_generator.random_graph(500), 2)
-    # best_weighted_graph_32KB = graph_generator.weighted_graph(graph_generator.best_graph(800), 2)
-    # worst_weighted_graph_32KB = graph_generator.weighted_graph(graph_generator.worst_graph(800), 2)
-    # rnd_weighted_graph_32KB = graph_generator.weighted_graph(graph_generator.random_graph(800), 2)
-    print("DFS")
-    speed_dfs(best_data_100V, 0)
-    speed_dfs(worst_data_100V, 0)
-    speed_dfs(rnd_data_100V, 0)
-    speed_dfs(best_data_500V, 0)
-    speed_dfs(worst_data_500V, 0)
-    speed_dfs(rnd_data_500V, 0)
-    speed_dfs(best_data_800V, 0)
-    speed_dfs(worst_data_800V, 0)
-    speed_dfs(rnd_data_800V, 0)
-    print("BFS")
-    speed_bfs(best_data_100V, 0)
-    speed_bfs(worst_data_100V, 0)
-    speed_bfs(rnd_data_100V, 0)
-    speed_bfs(best_data_500V, 0)
-    speed_bfs(worst_data_500V, 0)
-    speed_bfs(rnd_data_500V, 0)
-    speed_bfs(best_data_800V, 0)
-    speed_bfs(worst_data_800V, 0)
-    speed_bfs(rnd_data_800V, 0)
-    print("Topological sort by Kahn")
-    speed_top_sort_Kahn(best_data_100V)
-    speed_top_sort_Kahn(worst_data_100V)
-    speed_top_sort_Kahn(rnd_data_100V)
-    speed_top_sort_Kahn(best_data_500V)
-    speed_top_sort_Kahn(worst_data_500V)
-    speed_top_sort_Kahn(rnd_data_500V)
-    speed_top_sort_Kahn(best_data_800V)
-    speed_top_sort_Kahn(worst_data_800V)
-    speed_top_sort_Kahn(rnd_data_800V)
-    print("Topological sort on DFS")
-    speed_top_sort_DFS(best_data_100V)
-    speed_top_sort_DFS(worst_data_100V)
-    speed_top_sort_DFS(rnd_data_100V)
-    speed_top_sort_DFS(best_data_500V)
-    speed_top_sort_DFS(worst_data_500V)
-    speed_top_sort_DFS(rnd_data_500V)
-    speed_top_sort_DFS(best_data_800V)
-    speed_top_sort_DFS(worst_data_800V)
-    speed_top_sort_DFS(rnd_data_800V)
-    # print("Dijkstra")
-    # speed_dijkstra(best_weighted_graph_8KB, 0)
-    # speed_dijkstra(worst_weighted_graph_8KB, 0)
-    # speed_dijkstra(rnd_weighted_graph_8KB, 0)
-    # speed_dijkstra(best_weighted_graph_16KB, 0)
-    # speed_dijkstra(worst_weighted_graph_16KB, 0)
-    # speed_dijkstra(rnd_weighted_graph_16KB, 0)
-    # speed_dijkstra(best_weighted_graph_32KB, 0)
-    # speed_dijkstra(worst_weighted_graph_32KB, 0)
-    # speed_dijkstra(rnd_weighted_graph_32KB, 0)
-    print("OK")
+    print(*get_data(), sep='\n')
